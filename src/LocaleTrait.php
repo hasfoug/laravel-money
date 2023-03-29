@@ -1,20 +1,13 @@
 <?php
+declare(strict_types=1);
 
-namespace Cknow\Money;
+namespace Hasfoug\Money;
 
 trait LocaleTrait
 {
-    /**
-     * @var string
-     */
-    protected static $locale;
+    protected static string $locale;
 
-    /**
-     * Get locale.
-     *
-     * @return string
-     */
-    public static function getLocale()
+    public static function getLocale(): string
     {
         if (! isset(static::$locale)) {
             static::setLocale(config('money.locale', 'en_US'));
@@ -23,12 +16,7 @@ trait LocaleTrait
         return static::$locale;
     }
 
-    /**
-     * Set locale.
-     *
-     * @param  string  $locale
-     */
-    public static function setLocale($locale)
+    public static function setLocale(string $locale): void
     {
         static::$locale = $locale;
     }

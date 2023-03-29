@@ -1,6 +1,6 @@
 <?php
 
-namespace Cknow\Money\Tests;
+namespace Hasfoug\Money\Tests;
 
 class MoneyServiceProviderTest extends TestCase
 {

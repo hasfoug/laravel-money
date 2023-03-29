@@ -1,8 +1,8 @@
 <?php
 
-namespace Cknow\Money\Tests;
+namespace Hasfoug\Money\Tests;
 
-use Cknow\Money\Money;
+use Hasfoug\Money\Money;
 use Money\Currency;
 
 class MoneyTest extends TestCase
@@ -45,24 +45,40 @@ class MoneyTest extends TestCase
     {
         static::assertEquals(Money::USD(10), Money::min(Money::USD(10), Money::USD(20), Money::USD(30)));
         static::assertEquals(Money::EUR(10), Money::min(Money::EUR(10), Money::EUR(20), Money::EUR(30)));
+
+        // input gets parsed before operation
+        static::assertEquals(Money::USD(0), Money::min(null, Money::USD(20), Money::USD(30)));
+        static::assertEquals(Money::USD(5), Money::min(5, Money::USD(20), Money::USD(30)));
     }
 
     public function testMax()
     {
         static::assertEquals(Money::USD(30), Money::max(Money::USD(10), Money::USD(20), Money::USD(30)));
         static::assertEquals(Money::EUR(30), Money::max(Money::EUR(10), Money::EUR(20), Money::EUR(30)));
+
+        // input gets parsed before operation
+        static::assertEquals(Money::USD(30), Money::max(null, Money::USD(20), Money::USD(30)));
+        static::assertEquals(Money::USD(30), Money::max(5, Money::USD(20), Money::USD(30)));
     }
 
     public function testAvg()
     {
         static::assertEquals(Money::USD(20), Money::avg(Money::USD(10), Money::USD(20), Money::USD(30)));
         static::assertEquals(Money::EUR(20), Money::avg(Money::EUR(10), Money::EUR(20), Money::EUR(30)));
+
+        // input gets parsed before operation
+        static::assertEquals(Money::USD(16.67), Money::avg(null, Money::USD(2000), Money::USD(3000)));
+        static::assertEquals(Money::USD(15), Money::avg(0, 10, Money::USD(20), Money::USD(30)));
     }
 
     public function testSum()
     {
         static::assertEquals(Money::USD(60), Money::sum(Money::USD(10), Money::USD(20), Money::USD(30)));
         static::assertEquals(Money::EUR(60), Money::sum(Money::EUR(10), Money::EUR(20), Money::EUR(30)));
+
+        // input gets parsed before operation
+        static::assertEquals(Money::USD(50), Money::sum(null, Money::USD(20), Money::USD(30)));
+        static::assertEquals(Money::USD(50), Money::sum(0, Money::USD(20), Money::USD(30)));
     }
 
     public function testAdd()
@@ -71,6 +87,9 @@ class MoneyTest extends TestCase
         static::assertEquals(Money::USD(40), Money::USD(10)->add(Money::USD(15), Money::USD(15)));
         static::assertEquals(Money::EUR(25), Money::EUR(10)->add(Money::EUR(15)));
         static::assertEquals(Money::EUR(40), Money::EUR(10)->add(Money::EUR(15), Money::EUR(15)));
+
+        // input gets parsed before operation
+        static::assertEquals(Money::USD(40), Money::USD(10)->add(Money::USD(15), 15, 0));
     }
 
     public function testSubtract()
@@ -79,6 +98,9 @@ class MoneyTest extends TestCase
         static::assertEquals(Money::USD(15), Money::USD(25)->subtract(Money::USD(5), Money::USD(5)));
         static::assertEquals(Money::EUR(15), Money::EUR(20)->subtract(Money::EUR(5)));
         static::assertEquals(Money::EUR(10), Money::EUR(20)->subtract(Money::EUR(5), Money::EUR(5)));
+
+        // input gets parsed before operation
+        static::assertEquals(Money::USD(70), Money::USD(100)->subtract(Money::USD(15), 15, 0));
     }
 
     public function testMultiply()
@@ -107,6 +129,9 @@ class MoneyTest extends TestCase
     {
         static::assertEquals(Money::USD(115), Money::USD(415)->mod(Money::USD(150)));
         static::assertEquals(Money::EUR(230), Money::EUR(830)->mod(Money::EUR(300)));
+
+        // input gets parsed before operation
+        static::assertEquals(Money::USD(230), Money::USD(830)->mod(300));
     }
 
     public function testAbsolute()
@@ -137,12 +162,25 @@ class MoneyTest extends TestCase
     {
         static::assertTrue(Money::USD(100)->equals(Money::USD(100)));
         static::assertFalse(Money::EUR(100)->equals(Money::EUR(200)));
+
+        // input gets parsed before operation
+        static::assertFalse(Money::USD(100)->equals(200));
+        static::assertTrue(Money::USD(100)->equals(100));
+        static::assertTrue(Money::USD(100)->eq(100));
+        static::assertFalse(Money::USD(100)->equals(50));
+        static::assertTrue(Money::USD(0)->equals(null));
     }
 
     public function testGreaterThan()
     {
         static::assertTrue(Money::USD(100)->greaterThan(Money::USD(50)));
         static::assertFalse(Money::EUR(100)->greaterThan(Money::EUR(100)));
+
+        // input gets parsed before operation
+        static::assertFalse(Money::USD(100)->greaterThan(200));
+        static::assertTrue(Money::USD(150)->greaterThan(100));
+        static::assertTrue(Money::USD(140)->gt(100));
+        static::assertTrue(Money::USD(100)->gt(null));
     }
 
     public function testGreaterThanOrEqual()
@@ -150,12 +188,24 @@ class MoneyTest extends TestCase
         static::assertTrue(Money::USD(100)->greaterThanOrEqual(Money::USD(100)));
         static::assertTrue(Money::USD(100)->greaterThanOrEqual(Money::USD(50)));
         static::assertFalse(Money::EUR(100)->greaterThanOrEqual(Money::EUR(150)));
+
+        // input gets parsed before operation
+        static::assertFalse(Money::USD(100)->greaterThanOrEqual(200));
+        static::assertTrue(Money::USD(100)->greaterThanOrEqual(100));
+        static::assertFalse(Money::USD(90)->gte(100));
+        static::assertTrue(Money::USD(0)->gte(null));
     }
 
     public function testLessThan()
     {
         static::assertTrue(Money::USD(50)->lessThan(Money::USD(100)));
         static::assertFalse(Money::EUR(100)->lessThan(Money::EUR(100)));
+
+        // input gets parsed before operation
+        static::assertTrue(Money::USD(100)->lessThan(200));
+        static::assertFalse(Money::USD(100)->lessThan(100));
+        static::assertTrue(Money::USD(90)->lt(100));
+        static::assertFalse(Money::USD(0)->lt(null));
     }
 
     public function testLessThanOrEqual()
@@ -163,14 +213,23 @@ class MoneyTest extends TestCase
         static::assertTrue(Money::USD(100)->lessThanOrEqual(Money::USD(100)));
         static::assertTrue(Money::USD(50)->lessThanOrEqual(Money::USD(100)));
         static::assertFalse(Money::EUR(100)->lessThanOrEqual(Money::EUR(50)));
+
+        // input gets parsed before operation
+        static::assertTrue(Money::USD(100)->lessThanOrEqual(200));
+        static::assertTrue(Money::USD(100)->lessThanOrEqual(100));
+        static::assertTrue(Money::USD(90)->lte(100));
+        static::assertFalse(Money::USD(10)->lte(null));
+        static::assertTrue(Money::USD(0)->lte(null));
     }
 
     public function testValueSign()
     {
         static::assertTrue(Money::USD(0)->isZero());
         static::assertTrue(Money::EUR(0)->isZero());
+        static::assertFalse(Money::USD(0)->isNotZero());
         static::assertTrue(Money::USD(25)->isPositive());
         static::assertTrue(Money::EUR(25)->isPositive());
+        static::assertTrue(Money::USD(25)->isNotZero());
         static::assertTrue(Money::USD(-25)->isNegative());
         static::assertTrue(Money::EUR(-25)->isNegative());
     }
@@ -202,7 +261,7 @@ class MoneyTest extends TestCase
     public function testSerializeWithAttributes()
     {
         $money = new Money(100, new Currency('USD'));
-        $money->attributes(['foo' => 'bar']);
+        $money->setAttributes(['foo' => 'bar']);
 
         static::assertEquals(
             $money->jsonSerialize(),

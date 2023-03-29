@@ -1,17 +1,13 @@
 <?php
+declare(strict_types=1);
 
-namespace Cknow\Money;
+namespace Hasfoug\Money;
 
 use Illuminate\View\Compilers\BladeCompiler;
 
 class BladeExtension
 {
-    /**
-     * Register.
-     *
-     * @param  \Illuminate\View\Compilers\BladeCompiler  $compiler
-     */
-    public static function register(BladeCompiler $compiler)
+    public static function register(BladeCompiler $compiler): void
     {
         $compiler->directive('currency', function ($expression) {
             return "<?php echo currency({$expression}); ?>";
@@ -25,12 +21,7 @@ class BladeExtension
         self::registerParsers($compiler);
     }
 
-    /**
-     * Register aggregations.
-     *
-     * @param  \Illuminate\View\Compilers\BladeCompiler  $compiler
-     */
-    private static function registerAggregations(BladeCompiler $compiler)
+    private static function registerAggregations(BladeCompiler $compiler): void
     {
         $compiler->directive('money_min', function ($expression) {
             return "<?php echo money_min({$expression}); ?>";
@@ -49,12 +40,7 @@ class BladeExtension
         });
     }
 
-    /**
-     * Register parsers.
-     *
-     * @param  \Illuminate\View\Compilers\BladeCompiler  $compiler
-     */
-    private static function registerParsers(BladeCompiler $compiler)
+    private static function registerParsers(BladeCompiler $compiler): void
     {
         $compiler->directive('money_parse', function ($expression) {
             return "<?php echo money_parse({$expression}); ?>";

@@ -1,8 +1,8 @@
 <?php
 
-namespace Cknow\Money\Tests;
+namespace Hasfoug\Money\Tests;
 
-use Cknow\Money\CurrenciesTrait;
+use Hasfoug\Money\Traits\CurrenciesTrait;
 use Money\Currency;
 use stdClass;
 

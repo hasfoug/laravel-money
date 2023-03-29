@@ -1,10 +1,9 @@
 <?php
+declare(strict_types=1);
 
-namespace Cknow\Money;
+namespace Hasfoug\Money;
 
 /**
- * Money Factory.
- *
  * @method static Money AED(mixed $amount, bool $forceDecimals = false, string|null $locale = null, \Money\Currencies|null $currencies = null)
  * @method static Money ALL(mixed $amount, bool $forceDecimals = false, string|null $locale = null, \Money\Currencies|null $currencies = null)
  * @method static Money AMD(mixed $amount, bool $forceDecimals = false, string|null $locale = null, \Money\Currencies|null $currencies = null)
@@ -187,31 +186,18 @@ namespace Cknow\Money;
  */
 trait MoneyFactory
 {
-    /**
-     * __callStatic.
-     *
-     * @param  string  $method
-     * @param  array  $arguments
-     * @return \Cknow\Money\Money
-     */
-    public static function __callStatic($method, array $arguments)
+    public static function __callStatic(string $method, array $parameters): Money
     {
         return new Money(
-            $arguments[0],
+            $parameters[0],
             Money::parseCurrency($method),
-            $arguments[1] ?? false,
-            $arguments[2] ?? null,
-            $arguments[3] ?? null
+            $parameters[1] ?? false,
+            $parameters[2] ?? null,
+            $parameters[3] ?? null
         );
     }
 
-    /**
-     * Create a new instance from the base money instance.
-     *
-     * @param  \Money\Money  $instance
-     * @return \Cknow\Money\Money
-     */
-    public static function fromMoney(\Money\Money $instance)
+    public static function fromMoney(\Money\Money $instance): Money
     {
         return new Money($instance->getAmount(), $instance->getCurrency());
     }

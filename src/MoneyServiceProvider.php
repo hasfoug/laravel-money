@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace Cknow\Money;
+namespace Hasfoug\Money;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
@@ -8,22 +9,12 @@ use Illuminate\View\Compilers\BladeCompiler;
 
 class MoneyServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'money');
     }
 
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
+    public function boot(): void
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([__DIR__.'/../config/config.php' => config_path('money.php')], 'config');

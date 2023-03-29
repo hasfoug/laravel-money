@@ -1,9 +1,9 @@
 <?php
 
-namespace Cknow\Money\Tests;
+namespace Hasfoug\Money\Tests;
 
-use Cknow\Money\Formatters\CurrencySymbolMoneyFormatter;
-use Cknow\Money\Money;
+use Hasfoug\Money\Formatters\CurrencySymbolMoneyFormatter;
+use Hasfoug\Money\Money;
 use InvalidArgumentException;
 use Money\Currencies\BitcoinCurrencies;
 use Money\Formatter\BitcoinMoneyFormatter;

@@ -1,9 +1,9 @@
 <?php
 
-namespace Cknow\Money\Tests;
+namespace Hasfoug\Money\Tests;
 
-use Cknow\Money\Money;
-use Cknow\Money\Tests\Database\Models\User;
+use Hasfoug\Money\Money;
+use Hasfoug\Money\Tests\Database\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
@@ -49,19 +49,19 @@ class MoneyCastTest extends TestCase
         static::assertNull($user->debits);
         static::assertInstanceOf(Money::class, $user->credits);
 
-        static::assertSame('123456', $user->money->getAmount());
+        static::assertSame(123456, $user->money->getAmount());
         static::assertSame('USD', $user->money->getCurrency()->getCode());
 
-        static::assertSame('50000', $user->wage->getAmount());
+        static::assertSame(50000, $user->wage->getAmount());
         static::assertSame('EUR', $user->wage->getCurrency()->getCode());
 
         $user->debits = 100.99;
         $user->credits = '$99';
 
-        static::assertSame('10099', $user->debits->getAmount());
+        static::assertSame(10099, $user->debits->getAmount());
         static::assertSame('AUD', $user->debits->getCurrency()->getCode());
 
-        static::assertSame('9900', $user->credits->getAmount());
+        static::assertSame(9900, $user->credits->getAmount());
         static::assertSame('USD', $user->credits->getCurrency()->getCode());
 
         $user->save();
@@ -87,10 +87,10 @@ class MoneyCastTest extends TestCase
             'currency' => 'CAD',
         ]);
 
-        static::assertSame('0', $user->money->getAmount());
+        static::assertSame(0, $user->money->getAmount());
         static::assertSame('USD', $user->money->getCurrency()->getCode());
 
-        static::assertSame('6500000', $user->wage->getAmount());
+        static::assertSame(6500000, $user->wage->getAmount());
         static::assertSame('EUR', $user->wage->getCurrency()->getCode());
 
         static::assertNull($user->debits);
@@ -103,23 +103,23 @@ class MoneyCastTest extends TestCase
         $user->wage = 70500.19;
         $user->debits = '¥213860';
 
-        static::assertSame('100', $user->money->getAmount());
+        static::assertSame(100, $user->money->getAmount());
         static::assertSame('USD', $user->money->getCurrency()->getCode());
 
-        static::assertSame('7050019', $user->wage->getAmount());
+        static::assertSame(7050019, $user->wage->getAmount());
         static::assertSame('EUR', $user->wage->getCurrency()->getCode());
 
-        static::assertSame('213860', $user->debits->getAmount());
+        static::assertSame(213860, $user->debits->getAmount());
         static::assertSame('JPY', $user->debits->getCurrency()->getCode());
         static::assertSame('JPY', $user->currency);
 
         $user->money = '100,000.22';
         $user->debits = 'Ƀ0.00012345';
 
-        static::assertSame('10000022', $user->money->getAmount());
+        static::assertSame(10000022, $user->money->getAmount());
         static::assertSame('USD', $user->money->getCurrency()->getCode());
 
-        static::assertSame('12345', $user->debits->getAmount());
+        static::assertSame(12345, $user->debits->getAmount());
         static::assertSame('XBT', $user->debits->getCurrency()->getCode());
         static::assertSame('XBT', $user->currency);
 
@@ -139,7 +139,7 @@ class MoneyCastTest extends TestCase
     public function testFailsToSetInvalidMoney()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid data provided for Cknow\Money\Tests\Database\Models\User::$money');
+        $this->expectExceptionMessage('Invalid data provided for Hasfoug\Money\Tests\Database\Models\User::$money');
 
         new User(['money' => new stdClass()]);
     }
@@ -158,7 +158,7 @@ class MoneyCastTest extends TestCase
 
         $user->debits = 100.99;
 
-        static::assertSame('10099', $user->debits->getAmount());
+        static::assertSame(10099, $user->debits->getAmount());
         static::assertSame('USD', $user->debits->getCurrency()->getCode());
         static::assertSame('USD', $user->currency);
     }

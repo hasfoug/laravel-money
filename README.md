@@ -1,34 +1,21 @@
 # Laravel Money
 
-[![Latest Stable Version](https://poser.pugx.org/cknow/laravel-money/version)](https://packagist.org/packages/cknow/laravel-money)
-[![Total Downloads](https://poser.pugx.org/cknow/laravel-money/downloads)](https://packagist.org/packages/cknow/laravel-money)
-[![tests](https://github.com/cknow/laravel-money/workflows/tests/badge.svg)](https://github.com/cknow/laravel-money/actions)
-[![StyleCI](https://github.styleci.io/repos/40018123/shield?style=flat)](https://github.styleci.io/repos/40018123)
-[![codecov](https://codecov.io/gh/cknow/laravel-money/graph/badge.svg)](https://codecov.io/gh/cknow/laravel-money)
 [![License](https://poser.pugx.org/cknow/laravel-money/license)](https://packagist.org/packages/cknow/laravel-money)
 
-> **Note:** This project abstracts [MoneyPHP](http://moneyphp.org/)
+> **Note:** This project is based on [cknow/laravel-money](https://github.com/cknow/laravel-money) and abstracts [MoneyPHP](http://moneyphp.org/)
 
 ## Installation
 
 Run the following command from you terminal:
 
 ```bash
-composer require cknow/laravel-money
+composer require hasfoug/laravel-money
 ```
-
-or add this to require section in your composer.json file:
-
-```bash
-"cknow/laravel-money": "^7.0"
-```
-
-then run ```composer update```
 
 ## Usage
 
 ```php
-use Cknow\Money\Money;
+use Hasfoug\Money\Money;
 
 echo Money::USD(500); // $5.00
 echo Money::USD(500, true); // $500.00 force decimals
@@ -39,7 +26,7 @@ echo Money::USD(500, true); // $500.00 force decimals
 The defaults are set in `config/money.php`. Copy this file to your own config directory to modify the values. You can publish the config using this command:
 
 ```bash
-php artisan vendor:publish --provider="Cknow\Money\MoneyServiceProvider"
+php artisan vendor:publish --provider="Hasfoug\Money\MoneyServiceProvider"
 ```
 
 This is the contents of the published file:
@@ -54,6 +41,7 @@ return [
     'locale' => config('app.locale', 'en_US'),
     'defaultCurrency' => config('app.currency', 'USD'),
     'defaultFormatter' => null,
+    'defaultSerializer' => null,
     'currencies' => [
         'iso' => ['RUB', 'USD', 'EUR'],  // 'all' to choose all ISOCurrencies
         'bitcoin' => ['XBT'], // 'all' to choose all BitcoinCurrencies
@@ -65,12 +53,74 @@ return [
 ];
 ```
 
+## Main changes to the cknow/laravel-money version:
+
+### Most operations now accept mixed values, parsing them to default currency before operation
+Therefore, you are not required need to convert the operands to money instance anymore (unless you operate in non-default currency):
+
+```php
+Money::USD(500)->add(100); // $6.00
+Money::USD(500)->add(null); // $5.00
+Money::USD(500)->subtract(100); // $4.00
+Money::USD(500)->subtract(null); // $5.00
+
+// Aggregation
+Money::min(Money::USD(100), Money::USD(200), 300, null); // Money::USD(0)
+Money::max(Money::USD(100), Money::USD(200), 400); // Money::USD(400)
+Money::avg(Money::USD(100), Money::USD(200), 300); // Money::USD(200)
+Money::sum(Money::USD(100), Money::USD(200), 300, null, 0); // Money::USD(600)
+
+// Comparing
+Money::USD(500)->equals(500); // true
+Money::USD(500)->greaterThan(100); // true
+Money::USD(500)->greaterThan(null); // true
+Money::USD(500)->greaterThanOrEqual(500); // true
+Money::USD(500)->lessThan(1000); // true
+Money::USD(500)->lessThan(null); // false
+Money::USD(500)->lessThanOrEqual(500); // true
+Money::USD(0)->lessThanOrEqual(null); // true
+```
+
+### Added shortcuts for comparing operations
+
+```php
+Money::USD(500)->eq(500); // true
+Money::USD(500)->gt(100); // true
+Money::USD(500)->gte(500); // true
+Money::USD(500)->lt(1000); // true
+Money::USD(500)->lte(500); // true
+```
+
+### Added isNotZero accessor
+
+```php
+Money::USD(500)->isNotZero(); // true
+Money::USD(0)->isNotZero(); // false
+```
+
+### getAmount() method return type switched to int
+
+```php
+Money::USD(500)->getAmount(); // '500' -> Before
+Money::USD(500)->isNotZero(); // 500 -> Now
+```
+
+### Added defaultSerializer to the config to set default json serialization behaviour
+
+Change the value of money.defaultSerializer setting to one of those values:
+- \Hasfoug\Money\Tests\Serializers\ArrayMoneySerializer::class
+- \Hasfoug\Money\Tests\Serializers\DecimalMoneySerializer::class
+- \Hasfoug\Money\Tests\Serializers\IntegerMoneySerializer::class
+- \Hasfoug\Money\Tests\Serializers\StringMoneySerializer::class
+
+Or create your own, which should implement \Hasfoug\Money\Contracts\MoneySerializer
+
 ## Advanced Usage
 
 > See [MoneyPHP](http://moneyphp.org/) for more information
 
 ```php
-use Cknow\Money\Money;
+use Hasfoug\Money\Money;
 
 Money::USD(500)->add(Money::USD(500)); // $10.00
 Money::USD(500)->add(Money::USD(500), Money::USD(500)); // $15.00
@@ -150,8 +200,8 @@ Validator::make([
   'currency2' => 'EUR',
   'currency3' => new \Money\Currency('BRL'),
 ], [
-  'currency1' => new \Cknow\Money\Rules\Currency(),
-  'currency2' => new \Cknow\Money\Rules\Currency(),
+  'currency1' => new \Hasfoug\Money\Rules\Currency(),
+  'currency2' => new \Hasfoug\Money\Rules\Currency(),
   'currency3' => 'currency',
 ]);
 ```
@@ -169,9 +219,9 @@ Validator::make([
   'money5' => '€10.00',
   'money6' => 'R$10,00',
 ], [
-  'money1' => new \Cknow\Money\Rules\Money(),
-  'money2' => new \Cknow\Money\Rules\Money('EUR'), // forcing currency
-  'money3' => new \Cknow\Money\Rules\Money('BRL', 'pt_BR'), // forcing currency and locale
+  'money1' => new \Hasfoug\Money\Rules\Money(),
+  'money2' => new \Hasfoug\Money\Rules\Money('EUR'), // forcing currency
+  'money3' => new \Hasfoug\Money\Rules\Money('BRL', 'pt_BR'), // forcing currency and locale
   'money4' => 'money',
   'money5' => 'money:EUR', // forcing currency
   'money6' => 'money:BRL,pt_BR', // forcing currency and locale
@@ -183,9 +233,9 @@ Validator::make([
 At this stage the cast can be defined in the following ways:
 
 ```php
-use Cknow\Money\Casts\MoneyDecimalCast;
-use Cknow\Money\Casts\MoneyIntegerCast;
-use Cknow\Money\Casts\MoneyStringCast;
+use Hasfoug\Money\Casts\MoneyDecimalCast;
+use Hasfoug\Money\Casts\MoneyIntegerCast;
+use Hasfoug\Money\Casts\MoneyStringCast;
 
 protected $casts = [
     // cast money as decimal using the currency defined in the package config

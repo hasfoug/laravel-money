@@ -1,167 +1,106 @@
 <?php
 
+use Hasfoug\Money\Money;
+use Money\Currencies;
+use Money\Currency;
+
 if (! function_exists('currency')) {
-    /**
-     * currency.
-     *
-     * @param  \Money\Currency|string|null  $currency
-     * @return \Money\Currency
-     */
-    function currency($currency = null)
+    function currency(Currency|string|null $currency = null): Currency
     {
-        return Cknow\Money\Money::parseCurrency($currency ?: Cknow\Money\Money::getDefaultCurrency());
+        return Hasfoug\Money\Money::parseCurrency($currency ?: Hasfoug\Money\Money::getDefaultCurrency());
     }
 }
 
 if (! function_exists('money')) {
-    /**
-     * money.
-     *
-     * @param  mixed  $amount
-     * @param  \Money\Currency|string|null  $currency
-     * @param  bool  $forceDecimals
-     * @param  string|null  $locale
-     * @param  \Money\Currencies|null  $currencies
-     * @return \Cknow\Money\Money
-     */
-    function money($amount = null, $currency = null, $forceDecimals = false, $locale = null, $currencies = null)
+    function money(
+        mixed $amount = null,
+        Currency|string|null $currency = null,
+        bool $forceDecimals = false,
+        ?string $locale = null,
+        ?Currencies $currencies = null
+    ): Money
     {
-        return new Cknow\Money\Money($amount, $currency, $forceDecimals, $locale, $currencies);
+        return new Hasfoug\Money\Money($amount, $currency, $forceDecimals, $locale, $currencies);
     }
 }
 
 if (! function_exists('money_min')) {
-    /**
-     * money min.
-     *
-     * @param  \Cknow\Money\Money|\Money\Money  $first
-     * @param  \Cknow\Money\Money|\Money\Money  ...$collection
-     * @return \Cknow\Money\Money
-     */
-    function money_min($first, ...$collection)
+    function money_min(mixed $first, mixed ...$collection): Money
     {
-        return Cknow\Money\Money::min($first, ...$collection);
+        return Hasfoug\Money\Money::min($first, ...$collection);
     }
 }
 
 if (! function_exists('money_max')) {
-    /**
-     * money max.
-     *
-     * @param  \Cknow\Money\Money|\Money\Money  $first
-     * @param  \Cknow\Money\Money|\Money\Money  ...$collection
-     * @return \Cknow\Money\Money
-     */
-    function money_max($first, ...$collection)
+    function money_max(mixed $first, mixed ...$collection): Money
     {
-        return Cknow\Money\Money::max($first, ...$collection);
+        return Hasfoug\Money\Money::max($first, ...$collection);
     }
 }
 
 if (! function_exists('money_avg')) {
-    /**
-     * money avg.
-     *
-     * @param  \Cknow\Money\Money|\Money\Money  $first
-     * @param  \Cknow\Money\Money|\Money\Money  ...$collection
-     * @return \Cknow\Money\Money
-     */
-    function money_avg($first, ...$collection)
+    function money_avg(mixed $first, mixed ...$collection): Money
     {
-        return Cknow\Money\Money::avg($first, ...$collection);
+        return Hasfoug\Money\Money::avg($first, ...$collection);
     }
 }
 
 if (! function_exists('money_sum')) {
-    /**
-     * money sum.
-     *
-     * @param  \Cknow\Money\Money|\Money\Money  $first
-     * @param  \Cknow\Money\Money|\Money\Money  ...$collection
-     * @return \Cknow\Money\Money
-     */
-    function money_sum($first, ...$collection)
+    function money_sum(mixed $first, mixed ...$collection): Money
     {
-        return Cknow\Money\Money::sum($first, ...$collection);
+        return Hasfoug\Money\Money::sum($first, ...$collection);
     }
 }
 
 if (! function_exists('money_parse')) {
-    /**
-     * money parse.
-     *
-     * @param  mixed  $value
-     * @param  \Money\Currency|string|null  $currency
-     * @param  bool  $forceDecimals
-     * @param  string|null  $locale
-     * @param  \Money\Currencies|null  $currencies
-     * @param  int|null  $bitCointDigits
-     * @param  bool  $convert
-     * @return \Cknow\Money\Money|\Money\Money
-     */
     function money_parse(
-        $value,
-        $currency = null,
-        $forceDecimals = false,
-        $locale = null,
-        $currencies = null,
-        $bitCointDigits = null,
-        $convert = true
-    ) {
-        return Cknow\Money\Money::parse(
+        mixed $value,
+        Currency|string|null $currency = null,
+        bool$forceDecimals = false,
+        ?string $locale = null,
+        ?Currencies $currencies = null,
+        int $bitcoinDigits = null,
+        bool $convert = true
+    ): Money
+    {
+        return Hasfoug\Money\Money::parse(
             $value,
             $currency,
             $forceDecimals,
             $locale,
             $currencies,
-            $bitCointDigits,
+            $bitcoinDigits,
             $convert
         );
     }
 }
 
 if (! function_exists('money_parse_by_bitcoin')) {
-    /**
-     * money parse by bitcoin.
-     *
-     * @param  string  $money
-     * @param  \Money\Currency|string|null  $fallbackCurrency
-     * @param  int|null  $fractionDigits
-     * @param  bool  $convert
-     * @return \Cknow\Money\Money|\Money\Money
-     */
     function money_parse_by_bitcoin(
-        $money,
-        $fallbackCurrency = null,
-        $fractionDigits = null,
-        $convert = true
-    ) {
-        return Cknow\Money\Money::parseByBitcoin(
+        mixed $money,
+        Currency|string|null $fallbackCurrency = null,
+        ?int $fractionDigits = null,
+        bool $convert = true,
+    ): Money
+    {
+        return Hasfoug\Money\Money::parseByBitcoin(
             $money,
             $fallbackCurrency,
             $fractionDigits,
-            $convert
+            $convert,
         );
     }
 }
 
 if (! function_exists('money_parse_by_decimal')) {
-    /**
-     * money parse by decimal.
-     *
-     * @param  string  $money
-     * @param  \Money\Currency|string|null  $fallbackCurrency
-     * @param  \Money\Currencies|null  $currencies
-     * @param  bool  $convert
-     * @return \Cknow\Money\Money|\Money\Money
-     */
     function money_parse_by_decimal(
-        $money,
-        $fallbackCurrency = null,
-        Money\Currencies $currencies = null,
-        $convert = true
-    ) {
-        return Cknow\Money\Money::parseByDecimal(
+        mixed $money,
+        Currency|string|null $fallbackCurrency = null,
+        ?Currencies $currencies = null,
+        bool $convert = true,
+    ): Money
+    {
+        return Hasfoug\Money\Money::parseByDecimal(
             $money,
             $fallbackCurrency,
             $currencies,
@@ -171,26 +110,16 @@ if (! function_exists('money_parse_by_decimal')) {
 }
 
 if (! function_exists('money_parse_by_intl')) {
-    /**
-     * money parse by intl.
-     *
-     * @param  string  $money
-     * @param  \Money\Currency|string|null  $fallbackCurrency
-     * @param  string|null  $locale
-     * @param  \Money\Currencies|null  $currencies
-     * @param  int|null  $style
-     * @param  bool  $convert
-     * @return \Cknow\Money\Money|\Money\Money
-     */
     function money_parse_by_intl(
-        $money,
-        $fallbackCurrency = null,
-        $locale = null,
-        Money\Currencies $currencies = null,
-        $style = null,
-        $convert = true
-    ) {
-        return Cknow\Money\Money::parseByIntl(
+        mixed $money,
+        Currency|string|null $fallbackCurrency = null,
+        ?string $locale = null,
+        ?Currencies $currencies = null,
+        mixed $style = null,
+        bool $convert = true,
+    ): Money
+    {
+        return Hasfoug\Money\Money::parseByIntl(
             $money,
             $fallbackCurrency,
             $locale,
@@ -202,26 +131,16 @@ if (! function_exists('money_parse_by_intl')) {
 }
 
 if (! function_exists('money_parse_by_intl_localized_decimal')) {
-    /**
-     * money parse by intl localized decimal.
-     *
-     * @param  string  $money
-     * @param  \Money\Currency|string|null  $fallbackCurrency
-     * @param  string|null  $locale
-     * @param  \Money\Currencies|null  $currencies
-     * @param  int|null  $style
-     * @param  bool  $convert
-     * @return \Cknow\Money\Money|\Money\Money
-     */
     function money_parse_by_intl_localized_decimal(
-        $money,
-        $fallbackCurrency = null,
-        $locale = null,
-        Money\Currencies $currencies = null,
-        $style = null,
-        $convert = true
-    ) {
-        return Cknow\Money\Money::parseByIntlLocalizedDecimal(
+        mixed $money,
+        Currency|string|null $fallbackCurrency = null,
+        ?string $locale = null,
+        ?Currencies $currencies = null,
+        mixed $style = null,
+        bool $convert = true
+    ): Money
+    {
+        return Hasfoug\Money\Money::parseByIntlLocalizedDecimal(
             $money,
             $fallbackCurrency,
             $locale,

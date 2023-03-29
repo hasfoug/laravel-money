@@ -1,9 +1,9 @@
 <?php
 
-namespace Cknow\Money\Tests\Rules;
+namespace Hasfoug\Money\Tests\Rules;
 
-use Cknow\Money\Rules\Currency;
-use Cknow\Money\Tests\TestCase;
+use Hasfoug\Money\Rules\Currency;
+use Hasfoug\Money\Tests\TestCase;
 use Illuminate\Support\Facades\Validator;
 
 class CurrencyTest extends TestCase

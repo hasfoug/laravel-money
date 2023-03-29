@@ -1,8 +1,8 @@
 <?php
 
-namespace Cknow\Money\Tests;
+namespace Hasfoug\Money\Tests;
 
-use Cknow\Money\MoneyServiceProvider;
+use Hasfoug\Money\MoneyServiceProvider;
 use GrahamCampbell\TestBench\AbstractPackageTestCase;
 
 abstract class TestCase extends AbstractPackageTestCase
@@ -25,7 +25,7 @@ abstract class TestCase extends AbstractPackageTestCase
      *
      * @return string
      */
-    protected function getServiceProviderClass()
+    protected function getServiceProviderClass(): string
     {
         return MoneyServiceProvider::class;
     }

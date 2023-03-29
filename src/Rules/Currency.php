@@ -1,30 +1,19 @@
 <?php
+declare(strict_types=1);
 
-namespace Cknow\Money\Rules;
+namespace Hasfoug\Money\Rules;
 
-use Cknow\Money\Money;
+use Hasfoug\Money\Money;
 use Illuminate\Contracts\Validation\Rule;
 
 class Currency implements Rule
 {
-    /**
-     * Determine if the validation rule passes.
-     *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @return bool
-     */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         return Money::isValidCurrency($value);
     }
 
-    /**
-     * Get the validation error message.
-     *
-     * @return string
-     */
-    public function message()
+    public function message(): string
     {
         $message = trans('validation.currency');
 

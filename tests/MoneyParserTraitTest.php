@@ -1,8 +1,8 @@
 <?php
 
-namespace Cknow\Money\Tests;
+namespace Hasfoug\Money\Tests;
 
-use Cknow\Money\Money;
+use Hasfoug\Money\Money;
 use InvalidArgumentException;
 use Money\Currency;
 use Money\Exception\ParserException;

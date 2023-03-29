@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace Cknow\Money;
+namespace Hasfoug\Money\Traits;
 
 use InvalidArgumentException;
 use Money\Currencies;
@@ -12,28 +13,13 @@ use Money\Currency;
 
 trait CurrenciesTrait
 {
-    /**
-     * @var string
-     */
-    protected static $currency;
+    protected static string $currency;
 
-    /**
-     * @var \Money\Currencies
-     */
-    protected static $currencies;
+    protected static Currencies $currencies;
 
-    /**
-     * @var array
-     */
-    protected static $ISOCurrencies;
+    protected static array $ISOCurrencies;
 
-    /**
-     * Parse currency.
-     *
-     * @param  \Money\Currency|string  $currency
-     * @return \Money\Currency
-     */
-    public static function parseCurrency($currency)
+    public static function parseCurrency($currency): ?Currency
     {
         if (is_string($currency)) {
             return new Currency($currency);
@@ -42,23 +28,12 @@ trait CurrenciesTrait
         return $currency;
     }
 
-    /**
-     * Validates currency.
-     *
-     * @param  \Money\Currency|string  $currency
-     * @return bool
-     */
-    public static function isValidCurrency($currency)
+    public static function isValidCurrency(Currency|string $currency): bool
     {
         return static::getCurrencies()->contains(static::parseCurrency($currency));
     }
 
-    /**
-     * Get default currency.
-     *
-     * @return string
-     */
-    public static function getDefaultCurrency()
+    public static function getDefaultCurrency(): string
     {
         if (! isset(static::$currency)) {
             static::setDefaultCurrency(config('money.defaultCurrency', config('money.currency', 'USD')));
@@ -67,22 +42,12 @@ trait CurrenciesTrait
         return static::$currency;
     }
 
-    /**
-     * Set default currency.
-     *
-     * @param  string  $currency
-     */
-    public static function setDefaultCurrency($currency)
+    public static function setDefaultCurrency(string $currency): void
     {
         static::$currency = $currency;
     }
 
-    /**
-     * Get ISO currencies.
-     *
-     * @return array
-     */
-    public static function getISOCurrencies()
+    public static function getISOCurrencies(): array
     {
         if (! isset(static::$ISOCurrencies) && is_file($file = config('money.isoCurrenciesPath'))) {
             static::$ISOCurrencies = require $file;
@@ -91,12 +56,7 @@ trait CurrenciesTrait
         return static::$ISOCurrencies;
     }
 
-    /**
-     * Get currencies.
-     *
-     * @return \Money\Currencies
-     */
-    public static function getCurrencies()
+    public static function getCurrencies(): Currencies
     {
         if (! isset(static::$currencies)) {
             static::setCurrencies(config('money.currencies', []));
@@ -105,25 +65,14 @@ trait CurrenciesTrait
         return static::$currencies;
     }
 
-    /**
-     * Set currencies.
-     *
-     * @param  \Money\Currencies|array|null  $currencies
-     */
-    public static function setCurrencies($currencies)
+    public static function setCurrencies(mixed $currencies): void
     {
         static::$currencies = ($currencies instanceof Currencies)
             ? $currencies
             : static::makeCurrencies($currencies);
     }
 
-    /**
-     * Make currencies according to array derived from config or anywhere else.
-     *
-     * @param  array|null  $currenciesConfig
-     * @return \Money\Currencies
-     */
-    private static function makeCurrencies($currenciesConfig)
+    private static function makeCurrencies(array|null $currenciesConfig): Currencies
     {
         if (! $currenciesConfig || ! is_array($currenciesConfig)) {
             // for backward compatibility
@@ -158,14 +107,9 @@ trait CurrenciesTrait
     /**
      * Make currencies list according to array for specified source.
      *
-     * @param  array|string  $config
-     * @param  \Money\Currencies  $currencies
-     * @param  string  $sourceName
-     * @return \Money\Currencies
-     *
      * @throws \InvalidArgumentException
      */
-    private static function makeCurrenciesForSource($config, Currencies $currencies, $sourceName)
+    private static function makeCurrenciesForSource(mixed $config, Currencies $currencies, string $sourceName): Currencies
     {
         if ($config === 'all') {
             return $currencies;

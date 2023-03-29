@@ -1,34 +1,19 @@
 <?php
+declare(strict_types=1);
 
-namespace Cknow\Money\Casts;
+namespace Hasfoug\Money\Casts;
 
-use Cknow\Money\Money;
+use Hasfoug\Money\Money;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use InvalidArgumentException;
 
 abstract class MoneyCast implements CastsAttributes
 {
-    /**
-     * The currency code or the model attribute holding the currency code.
-     *
-     * @var string|null
-     */
-    protected $currency;
+    protected ?string $currency;
 
-    /**
-     * Force decimals.
-     *
-     * @var bool
-     */
-    protected $forceDecimals = false;
+    protected bool $forceDecimals = false;
 
-    /**
-     * Instantiate the class.
-     *
-     * @param  string|null  $currency
-     * @param  mixed  $forceDecimals
-     */
-    public function __construct(string $currency = null, $forceDecimals = null)
+    public function __construct(string $currency = null, ?bool $forceDecimals = null)
     {
         $this->currency = $currency;
         $this->forceDecimals = is_string($forceDecimals)
@@ -36,13 +21,7 @@ abstract class MoneyCast implements CastsAttributes
             : (bool) $forceDecimals;
     }
 
-    /**
-     * Get formatter.
-     *
-     * @param  \Cknow\Money\Money  $money
-     * @return string|float|int
-     */
-    abstract protected function getFormatter(Money $money);
+    abstract protected function getFormatter(Money $money): mixed;
 
     /**
      * Transform the attribute from the underlying model values.
@@ -51,7 +30,7 @@ abstract class MoneyCast implements CastsAttributes
      * @param  string  $key
      * @param  mixed  $value
      * @param  array  $attributes
-     * @return \Cknow\Money\Money|null
+     * @return \Hasfoug\Money\Money|null
      */
     public function get($model, string $key, $value, array $attributes)
     {

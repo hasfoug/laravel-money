@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 
-namespace Cknow\Money;
+namespace Hasfoug\Money\Traits;
 
-use Cknow\Money\Formatters\CurrencySymbolMoneyFormatter;
+use Hasfoug\Money\Formatters\CurrencySymbolMoneyFormatter;
 use InvalidArgumentException;
 use Money\Currencies;
 use Money\Currencies\BitcoinCurrencies;
@@ -17,16 +18,9 @@ use NumberFormatter;
 trait MoneyFormatterTrait
 {
     /**
-     * Format.
-     *
-     * @param  string|null  $locale
-     * @param  \Money\Currencies|null  $currencies
-     * @param  int  $style
-     * @return string
-     *
      * @throws \InvalidArgumentException
      */
-    public function format($locale = null, Currencies $currencies = null, $style = NumberFormatter::CURRENCY)
+    public function format(?string $locale = null, ?Currencies $currencies = null, int $style = NumberFormatter::CURRENCY): mixed
     {
         $defaultFormatter = config('money.defaultFormatter');
 
@@ -52,69 +46,37 @@ trait MoneyFormatterTrait
     }
 
     /**
-     * Format by aggregate.
-     *
      * @param  MoneyFormatter[]  $formatters
-     * @return string
      */
-    public function formatByAggregate(array $formatters)
+    public function formatByAggregate(array $formatters): string
     {
         $formatter = new AggregateMoneyFormatter($formatters);
 
         return $this->formatByFormatter($formatter);
     }
 
-    /**
-     * Format by bitcoin.
-     *
-     * @param  int  $fractionDigits
-     * @param  \Money\Currencies|null  $currencies
-     * @return string
-     */
-    public function formatByBitcoin($fractionDigits = 2, Currencies $currencies = null)
+    public function formatByBitcoin(int $fractionDigits = 2, ?Currencies $currencies = null): string
     {
         $formatter = new BitcoinMoneyFormatter($fractionDigits, $currencies ?: new BitcoinCurrencies());
 
         return $this->formatByFormatter($formatter);
     }
 
-    /**
-     * Format by currency symbol.
-     *
-     * @param  bool  $right
-     * @param  string|null  $locale
-     * @param  \Money\Currencies  $currencies
-     * @return string
-     */
-    public function formatByCurrencySymbol($right = false, $locale = null, Currencies $currencies = null)
+    public function formatByCurrencySymbol(bool $right = false, ?string $locale = null, ?Currencies $currencies = null): string
     {
         $formatter = new CurrencySymbolMoneyFormatter($right, $locale ?: static::getLocale(), $currencies ?: static::getCurrencies());
 
         return $this->formatByFormatter($formatter);
     }
 
-    /**
-     * Format by decimal.
-     *
-     * @param  \Money\Currencies|null  $currencies
-     * @return string
-     */
-    public function formatByDecimal(Currencies $currencies = null)
+    public function formatByDecimal(?Currencies $currencies = null): string
     {
         $formatter = new DecimalMoneyFormatter($currencies ?: static::getCurrencies());
 
         return $this->formatByFormatter($formatter);
     }
 
-    /**
-     * Format by intl.
-     *
-     * @param  string|null  $locale
-     * @param  \Money\Currencies|null  $currencies
-     * @param  int  $style
-     * @return string
-     */
-    public function formatByIntl($locale = null, Currencies $currencies = null, $style = NumberFormatter::CURRENCY)
+    public function formatByIntl(?string $locale = null, ?Currencies $currencies = null, int $style = NumberFormatter::CURRENCY): string
     {
         $numberFormatter = new NumberFormatter($locale ?: static::getLocale(), $style);
         $formatter = new IntlMoneyFormatter($numberFormatter, $currencies ?: static::getCurrencies());
@@ -122,32 +84,19 @@ trait MoneyFormatterTrait
         return $this->formatByFormatter($formatter);
     }
 
-    /**
-     * Format by intl localized decimal.
-     *
-     * @param  string|null  $locale
-     * @param  \Money\Currencies|null  $currencies
-     * @param  int  $style
-     * @return string
-     */
     public function formatByIntlLocalizedDecimal(
-        $locale = null,
-        Currencies $currencies = null,
-        $style = NumberFormatter::CURRENCY
-    ) {
+        ?string $locale = null,
+        ?Currencies $currencies = null,
+        int $style = NumberFormatter::CURRENCY
+    ): string
+    {
         $numberFormatter = new NumberFormatter($locale ?: static::getLocale(), $style);
         $formatter = new IntlLocalizedDecimalFormatter($numberFormatter, $currencies ?: static::getCurrencies());
 
         return $this->formatByFormatter($formatter);
     }
 
-    /**
-     * Format by formatter.
-     *
-     * @param  \Money\MoneyFormatter  $formatter
-     * @return string
-     */
-    public function formatByFormatter(MoneyFormatter $formatter)
+    public function formatByFormatter(MoneyFormatter $formatter): string
     {
         return $formatter->format($this->money);
     }

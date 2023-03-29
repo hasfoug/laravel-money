@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 
-namespace Cknow\Money\Formatters;
+namespace Hasfoug\Money\Formatters;
 
-use Cknow\Money\Money;
+use Hasfoug\Money\Money;
 use Money\Currencies;
 use Money\Formatter\DecimalMoneyFormatter;
 use Money\MoneyFormatter;
@@ -10,44 +11,22 @@ use NumberFormatter;
 
 class CurrencySymbolMoneyFormatter implements MoneyFormatter
 {
-    /**
-     * @var bool
-     */
-    protected $right;
+    protected bool $right;
 
-    /**
-     * @var string
-     */
-    protected $locale;
+    protected string $locale;
 
-    /**
-     * @var \Money\Currencies
-     */
-    protected $currencies;
+    protected \Money\Currencies $currencies;
 
-    /**
-     * Instantiate the class.
-     *
-     * @param  bool  $right
-     * @param  string|null  $locale
-     * @param  \Money\Currencies|null  $currencies
-     */
-    public function __construct($right = false, $locale = null, Currencies $currencies = null)
+    public function __construct(bool $right = false, ?string $locale = null, ?Currencies $currencies = null)
     {
         $this->right = $right;
         $this->locale = $locale ?: Money::getLocale();
         $this->currencies = $currencies ?: Money::getCurrencies();
     }
 
-    /**
-     * Formats a Money object as string.
-     *
-     * @param  \Money\Money  $moeny
-     * @return string
-     */
     public function format(\Money\Money $money): string
     {
-        $numberFormatter = new NumberFormatter($this->locale, NumberFormatter::CURRENCY);
+        $numberFormatter = new NumberFormatter($this->locale, NumberFormatter::DECIMAL);
         $symbol = $numberFormatter->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
 
         $formatter = new DecimalMoneyFormatter($this->currencies);

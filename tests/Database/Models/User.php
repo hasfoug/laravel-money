@@ -1,10 +1,10 @@
 <?php
 
-namespace Cknow\Money\Tests\Database\Models;
+namespace Hasfoug\Money\Tests\Database\Models;
 
-use Cknow\Money\Casts\MoneyDecimalCast;
-use Cknow\Money\Casts\MoneyIntegerCast;
-use Cknow\Money\Casts\MoneyStringCast;
+use Hasfoug\Money\Casts\MoneyDecimalCast;
+use Hasfoug\Money\Casts\MoneyIntegerCast;
+use Hasfoug\Money\Casts\MoneyStringCast;
 use Illuminate\Database\Eloquent\Model;
 
 /**

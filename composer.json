@@ -1,18 +1,22 @@
 {
-    "name": "cknow/laravel-money",
+    "name": "hasfoug/laravel-money",
     "description": "Laravel Money",
     "keywords": [
         "laravel",
         "money",
         "currency"
     ],
-    "homepage": "https://github.com/cknow/laravel-money",
+    "homepage": "https://github.com/hasfoug/laravel-money",
     "license": "MIT",
     "type": "library",
     "authors": [
         {
             "name": "Ricardo Gobbo de Souza",
             "email": "ricardogobbosouza@yahoo.com.br"
+        },
+        {
+          "name": "Bohdan Klochko",
+          "email": "bohdanklochko1@gmail.com"
         }
     ],
     "require": {
@@ -32,7 +36,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Cknow\\Money\\": "src/"
+            "Hasfoug\\Money\\": "src/"
         },
         "files": [
             "src/helpers.php"
@@ -40,7 +44,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Cknow\\Money\\Tests\\": "tests/"
+            "Hasfoug\\Money\\Tests\\": "tests/"
         },
         "files": [
             "tests/Database/Migrations/2020_04_30_000000_create_users_table.php"
@@ -49,7 +53,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Cknow\\Money\\MoneyServiceProvider"
+                "Hasfoug\\Money\\MoneyServiceProvider"
             ]
         }
     },

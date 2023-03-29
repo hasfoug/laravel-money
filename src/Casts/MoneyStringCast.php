@@ -1,19 +1,14 @@
 <?php
+declare(strict_types=1);
 
-namespace Cknow\Money\Casts;
+namespace Hasfoug\Money\Casts;
 
-use Cknow\Money\Money;
+use Hasfoug\Money\Money;
 
 class MoneyStringCast extends MoneyCast
 {
-    /**
-     * Get formatter.
-     *
-     * @param  \Cknow\Money\Money  $money
-     * @return string
-     */
-    protected function getFormatter(Money $money)
+    protected function getFormatter(Money $money): string
     {
-        return (string) $money->formatByIntl();
+        return $money->formatByIntl();
     }
 }

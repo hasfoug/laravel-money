@@ -1,9 +1,9 @@
 <?php
 
-namespace Cknow\Money\Tests\Rules;
+namespace Hasfoug\Money\Tests\Rules;
 
-use Cknow\Money\Rules\Money;
-use Cknow\Money\Tests\TestCase;
+use Hasfoug\Money\Rules\Money;
+use Hasfoug\Money\Tests\TestCase;
 use Illuminate\Support\Facades\Validator;
 use stdClass;
 
@@ -23,7 +23,7 @@ class MoneyTest extends TestCase
                 'money8' => 'R$10,00',
                 'money9' => 'R$10,00',
                 'money10' => \Money\Money::USD(10),
-                'money11' => new \Cknow\Money\Money(10),
+                'money11' => new \Hasfoug\Money\Money(10),
             ],
             [
                 'money1' => 'money',

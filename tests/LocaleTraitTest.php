@@ -1,8 +1,8 @@
 <?php
 
-namespace Cknow\Money\Tests;
+namespace Hasfoug\Money\Tests;
 
-use Cknow\Money\LocaleTrait;
+use Hasfoug\Money\LocaleTrait;
 
 class LocaleTraitTest extends TestCase
 {
