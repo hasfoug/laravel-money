@@ -76,6 +76,20 @@ abstract class MoneyCast implements CastsAttributes
     }
 
     /**
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param  string  $key
+     * @param  Money  $value
+     * @param  array  $attributes
+     * @return array
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function serialize($model, string $key, $value, array $attributes): mixed
+    {
+        return $value->serialize();
+    }
+
+    /**
      * Get currency.
      *
      * @param  array  $attributes
