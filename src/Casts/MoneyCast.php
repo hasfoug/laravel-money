@@ -13,7 +13,7 @@ abstract class MoneyCast implements CastsAttributes
 
     protected bool $forceDecimals = false;
 
-    public function __construct(string $currency = null, ?bool $forceDecimals = null)
+    public function __construct(string $currency = 'currency', ?bool $forceDecimals = null)
     {
         $this->currency = $currency;
         $this->forceDecimals = is_string($forceDecimals)
