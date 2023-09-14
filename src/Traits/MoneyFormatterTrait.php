@@ -64,7 +64,11 @@ trait MoneyFormatterTrait
 
     public function formatByCurrencySymbol(bool $right = false, ?string $locale = null, ?Currencies $currencies = null): string
     {
-        $formatter = new CurrencySymbolMoneyFormatter($right, $locale ?: static::getLocale(), $currencies ?: static::getCurrencies());
+        $formatter = new CurrencySymbolMoneyFormatter(
+            $right,
+                $locale ?? $this->guessLocaleFromCurrency() ?? static::getLocale(),
+            $currencies ?: static::getCurrencies(),
+        );
 
         return $this->formatByFormatter($formatter);
     }
@@ -78,7 +82,7 @@ trait MoneyFormatterTrait
 
     public function formatByIntl(?string $locale = null, ?Currencies $currencies = null, int $style = NumberFormatter::CURRENCY): string
     {
-        $numberFormatter = new NumberFormatter($locale ?: static::getLocale(), $style);
+        $numberFormatter = new NumberFormatter($locale ?? $this->guessLocaleFromCurrency() ?? static::getLocale(), $style);
         $formatter = new IntlMoneyFormatter($numberFormatter, $currencies ?: static::getCurrencies());
 
         return $this->formatByFormatter($formatter);
@@ -90,7 +94,7 @@ trait MoneyFormatterTrait
         int $style = NumberFormatter::CURRENCY
     ): string
     {
-        $numberFormatter = new NumberFormatter($locale ?: static::getLocale(), $style);
+        $numberFormatter = new NumberFormatter($locale ?? $this->guessLocaleFromCurrency() ?? static::getLocale(), $style);
         $formatter = new IntlLocalizedDecimalFormatter($numberFormatter, $currencies ?: static::getCurrencies());
 
         return $this->formatByFormatter($formatter);
@@ -99,5 +103,10 @@ trait MoneyFormatterTrait
     public function formatByFormatter(MoneyFormatter $formatter): string
     {
         return $formatter->format($this->money);
+    }
+
+    public function guessLocaleFromCurrency(): ?string
+    {
+        return config('money.localeMap')[$this->money->getCurrency()->getCode()] ?? config('money.locale');
     }
 }

@@ -19,4 +19,5 @@ return [
             // 'MY2' => 3
         ],
     ],
+    'localeMap' => [],
 ];
