@@ -37,31 +37,31 @@ trait ComparesValues
 
     public function equals(mixed $other): bool
     {
-        return $this->money->equals(self::parse($other)->money);
+        return $this->money->equals(self::parse($other, $this->money->getCurrency())->money);
     }
 
     public function greaterThan(mixed $other): bool
     {
-        return $this->money->greaterThan(self::parse($other)->money);
+        return $this->money->greaterThan(self::parse($other, $this->money->getCurrency())->money);
     }
 
     public function greaterThanOrEqual(mixed $other): bool
     {
-        return $this->money->greaterThanOrEqual(self::parse($other)->money);
+        return $this->money->greaterThanOrEqual(self::parse($other, $this->money->getCurrency())->money);
     }
 
     public function lessThan(mixed $other): bool
     {
-        return $this->money->lessThan(self::parse($other)->money);
+        return $this->money->lessThan(self::parse($other, $this->money->getCurrency())->money);
     }
 
     public function lessThanOrEqual(mixed $other): bool
     {
-        return $this->money->lessThanOrEqual(self::parse($other)->money);
+        return $this->money->lessThanOrEqual(self::parse($other, $this->money->getCurrency())->money);
     }
 
     public function compare(mixed $other): int
     {
-        return $this->money->compare(self::parse($other)->money);
+        return $this->money->compare(self::parse($other, $this->money->getCurrency())->money);
     }
 }

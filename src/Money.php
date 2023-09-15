@@ -108,7 +108,7 @@ class Money implements Arrayable, Jsonable, JsonSerializable, Renderable
 
     public function add(mixed ...$addends): self
     {
-        $addends = collect($addends)->map(fn (mixed $addend) => self::parse($addend)->money);
+        $addends = collect($addends)->map(fn (mixed $addend) => self::parse($addend, $this->getCurrency())->money);
 
         return new self(
             $this->money->add(...$addends)
@@ -117,7 +117,7 @@ class Money implements Arrayable, Jsonable, JsonSerializable, Renderable
 
     public function subtract(mixed ...$addends): self
     {
-        $addends = collect($addends)->map(fn (mixed $addend) => self::parse($addend)->money);
+        $addends = collect($addends)->map(fn (mixed $addend) => self::parse($addend, $this->getCurrency())->money);
 
         return new self(
             $this->money->subtract(...$addends)
@@ -127,7 +127,7 @@ class Money implements Arrayable, Jsonable, JsonSerializable, Renderable
     public function mod(mixed $divisor): self
     {
         return new self(
-            $this->money->mod(self::parse($divisor)->money)
+            $this->money->mod(self::parse($divisor, $this->getCurrency())->money)
         );
     }
 
@@ -148,7 +148,7 @@ class Money implements Arrayable, Jsonable, JsonSerializable, Renderable
     public static function min(mixed $first, mixed ...$collection): self
     {
         $first = self::parse($first)->money;
-        $collection = collect($collection)->map(fn (mixed $item) => self::parse($item)->money);
+        $collection = collect($collection)->map(fn (mixed $item) => self::parse($item, $first->getCurrency())->money);
 
         return new self(
             \Money\Money::min($first, ...$collection)
@@ -158,7 +158,7 @@ class Money implements Arrayable, Jsonable, JsonSerializable, Renderable
     public static function max(mixed $first, mixed ...$collection): self
     {
         $first = self::parse($first)->money;
-        $collection = collect($collection)->map(fn (mixed $item) => self::parse($item)->money);
+        $collection = collect($collection)->map(fn (mixed $item) => self::parse($item, $first->getCurrency())->money);
 
         return new self(
             \Money\Money::max($first, ...$collection)
@@ -168,7 +168,7 @@ class Money implements Arrayable, Jsonable, JsonSerializable, Renderable
     public static function sum(mixed $first, mixed ...$collection): self
     {
         $first = self::parse($first)->money;
-        $collection = collect($collection)->map(fn (mixed $item) => self::parse($item)->money);
+        $collection = collect($collection)->map(fn (mixed $item) => self::parse($item, $first->getCurrency())->money);
 
         return new self(
             \Money\Money::sum($first, ...$collection)
@@ -178,7 +178,7 @@ class Money implements Arrayable, Jsonable, JsonSerializable, Renderable
     public static function avg(mixed $first, mixed ...$collection): self
     {
         $first = self::parse($first)->money;
-        $collection = collect($collection)->map(fn (mixed $item) => self::parse($item)->money);
+        $collection = collect($collection)->map(fn (mixed $item) => self::parse($item, $first->getCurrency())->money);
 
         return new self(
             \Money\Money::avg($first, ...$collection)
