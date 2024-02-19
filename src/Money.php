@@ -148,8 +148,8 @@ class Money implements Arrayable, Jsonable, JsonSerializable, Renderable
     public function roundBy(int $number, bool $up): self
     {
         $result = match ($up) {
-            false => fn ($price) => $number * round($this->getAmount() / $number),
-            true => fn ($price) => $number * ceil($this->getAmount() / $number),
+            false => $number * round($this->getAmount() / $number),
+            true => $number * ceil($this->getAmount() / $number),
         };
 
         return new self((int) $result, $this->getCurrency());
