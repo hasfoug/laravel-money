@@ -23,7 +23,6 @@ use Money\Currency;
  * @method Money[] allocateTo(int $n)
  * @method string ratioOf(Money|\Money\Money $money)
  * @method Money absolute()
- * @method Money negative()
  * @method bool isZero()
  * @method bool isPositive()
  * @method bool isNegative()
@@ -74,7 +73,7 @@ class Money implements Arrayable, Jsonable, JsonSerializable, Renderable
 
         $methods = [
             'allocate', 'allocateTo',
-            'absolute', 'negative',
+            'absolute',
         ];
 
         if (! in_array($method, $methods)) {
@@ -143,6 +142,13 @@ class Money implements Arrayable, Jsonable, JsonSerializable, Renderable
         return new self(
             $this->money->multiply((string) $multiplier, $roundingMode)
         );
+    }
+
+    public function negative(bool $flag = true): self
+    {
+        return $flag
+            ? new self($this->money->negative())
+            : $this;
     }
 
     public function roundBy(int $number, bool $up): self
