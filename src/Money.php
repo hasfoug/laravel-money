@@ -147,7 +147,7 @@ class Money implements Arrayable, Jsonable, JsonSerializable, Renderable
     public function negative(bool $flag = true): self
     {
         return $flag
-            ? new self($this->money->negative())
+            ? new self($this->money->absolute()->negative())
             : $this;
     }
 
