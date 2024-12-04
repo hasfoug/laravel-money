@@ -89,6 +89,16 @@ abstract class MoneyCast implements CastsAttributes
         return $value->serialize();
     }
 
+    public function increment($model, string $key, $value, array $attributes): mixed
+    {
+        return $model->{$key}->add($value);
+    }
+
+    public function decrement($model, string $key, $value, array $attributes): mixed
+    {
+        return $model->{$key}->subtract($value);
+    }
+
     /**
      * Get currency.
      *
