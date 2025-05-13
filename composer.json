@@ -23,15 +23,15 @@
         "php": "^8.0",
         "ext-json": "*",
         "ext-intl": "*",
-        "illuminate/support": "^7.0|^8.0|^9.0|^10.0|^11.0",
-        "illuminate/view": "^7.0|^8.0|^9.0|^10.0|^11.0",
+        "illuminate/support": "^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
+        "illuminate/view": "^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
         "moneyphp/money": "^3.3|^4.0.3"
     },
     "require-dev": {
         "graham-campbell/testbench": "^5.7",
-        "illuminate/filesystem": "^7.0|^8.0|^9.0|^10.0|^11.0",
+        "illuminate/filesystem": "^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
         "mockery/mockery": "^1.5",
-        "phpunit/phpunit": "^8.5|^9.5.10|^10.0",
+        "phpunit/phpunit": "^8.5|^9.5.10|^10.0|^11.0",
         "spatie/phpunit-watcher": "^1.0"
     },
     "autoload": {
