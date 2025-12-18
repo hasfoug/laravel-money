@@ -59,7 +59,7 @@ if (! function_exists('money_parse')) {
         bool$forceDecimals = false,
         ?string $locale = null,
         ?Currencies $currencies = null,
-        int $bitcoinDigits = null,
+        ?int $bitcoinDigits = null,
         bool $convert = true
     ): Money
     {
